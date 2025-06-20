@@ -11,7 +11,7 @@ export const useAlertas = () => {
             setLoading(true);
             setError(null);
             const response = await getAlertas();
-            setAlertas(response.data.data || []);
+            setAlertas(response.data || []);
         } catch (err) {
             setError('Não foi possível carregar os alertas.');
             console.error(err);
