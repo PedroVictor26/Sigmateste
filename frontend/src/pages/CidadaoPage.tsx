@@ -21,7 +21,7 @@ const CidadaoPage = ({ onNavigate }) => {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
-                const payload = { ...formData, latitude, longitude };
+                const payload = { description: `[${formData.tipo}] ${formData.descricao}`, latitude, longitude };
 
                 try {
                     await createAlerta(payload);

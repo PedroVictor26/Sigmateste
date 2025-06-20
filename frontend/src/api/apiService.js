@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000'; // URL do backend do seu colega
+const API_URL = 'http://localhost:8000'; // URL do backend do seu colega
 const USE_MOCK_DATA = false; // <<< MUDE PARA 'false' PARA USAR O BACKEND REAL
 
 let mockAlertas = [
@@ -17,7 +17,7 @@ export const getAlertas = () => {
         console.warn("Usando dados FALSOS (mock) para alertas.");
         return Promise.resolve({ data: { data: mockAlertas } });
     }
-    return api.get('/alertas');
+    return api.get('/painel/alertas');
 };
 
 export const createAlerta = (alertaData) => {
@@ -34,5 +34,5 @@ export const createAlerta = (alertaData) => {
         mockAlertas.push(newAlerta);
         return Promise.resolve({ data: { data: newAlerta } });
     }
-    return api.post('/alertas', alertaData);
+    return api.post('/cidadao/denuncia', alertaData);
 };

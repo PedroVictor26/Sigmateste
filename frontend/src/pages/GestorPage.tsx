@@ -10,6 +10,24 @@ const GestorPage = ({ onNavigate }) => {
     const { alertas, loading, error } = useAlertas();
     const position = [-23.5505, -46.6333]; // Centro do mapa
 
+    // Transformar alertas para o formato esperado pelo frontend
+    const processedAlertas = alertas && alertas.length > 0 ? alertas.map(backendAlert => {
+        // Adicionando verificações para garantir que report e prediction existem
+        if (!backendAlert.report || !backendAlert.prediction) {
+            console.warn('Alerta com estrutura inesperada:', backendAlert);
+            return null; // Ou alguma estrutura padrão / log de erro
+        }
+        return {
+            id: backendAlert.id,
+            latitude: backendAlert.report.latitude,
+            longitude: backendAlert.report.longitude,
+            descricao: backendAlert.report.description,
+            prioridade: backendAlert.prediction.risk_level,
+            tipo: backendAlert.prediction.category,
+            equipe_sugerida: backendAlert.prediction.suggested_action,
+        };
+    }).filter(alerta => alerta !== null) : [];
+
     return (
         <div className="page-container gestor-page">
             <Header onNavigate={onNavigate} />
@@ -21,7 +39,7 @@ const GestorPage = ({ onNavigate }) => {
                         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {alertas.map(alerta => (
+                    {processedAlertas.map(alerta => (
                         <AlertaMarker key={alerta.id} alerta={alerta} />
                     ))}
                 </MapContainer>
